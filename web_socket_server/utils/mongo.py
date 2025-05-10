@@ -1,4 +1,6 @@
+from typing import Union, Any
 import pymongo
+from pymongo.results import	InsertOneResult
 import pymongo.database
 import pymongo.errors
 from pymongo.mongo_client import MongoClient
@@ -35,12 +37,11 @@ def get_all(database, collection):
     for element in cursor:
         print(element)
 
-def create_user(querry: dict):
+def create_user(querry: dict) -> Union[InsertOneResult, dict]:
     try:
         return DATABASE.get_collection("users").insert_one(querry)
     except pymongo.errors.DuplicateKeyError as e:
-        print(e.code)
-        return "YA EXISTE UN USUARIO CON ESE NOMBRE"
+        return e.details
 
 def get_user(username: str) -> dict:
     return DATABASE.get_collection("users").find_one({"username": username})  
@@ -59,5 +60,11 @@ def create_index():
 
 if __name__ == "__main__":
     init_connection() 
-    print(get_user("salo"))
+    a = create_user({
+        "username": "usernamea",
+        "password": "password",
+        "email": "sasalos@salo.com"
+    })
+    print(a)
+    print(type(a))
     CLIENT.close()

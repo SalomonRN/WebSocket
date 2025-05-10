@@ -43,7 +43,7 @@ const Chat = () => {
     if (!message && !file) return
 
     let buffer = await handleUpload(file);
-    socket?.emit("chat_message", message, buffer);
+    socket?.emit("chat_message", message, buffer, location.state.room);
     setMessage("");
     setFile(null);
     label!.innerText = "Upload File"

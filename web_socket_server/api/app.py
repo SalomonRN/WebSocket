@@ -1,21 +1,11 @@
-from flask import Flask
-from flask import request
-from flask_cors import CORS
+from fastapi import FastAPI
 
-app = Flask(__name__)
-CORS(app)
+app = FastAPI()
 
-@app.route('/')
-def hi_world(): 
-    return "Hola Mundo"
+@app.get("/")
+async def home():
+    return {"msg": "Hola Mundo!"}
 
-@app.route('/api/users/')
-def hi(): 
-    print(request.headers.get('token', None))
-    return "Hola user"
-
-
-@app.route('/ping/', methods=['GET'])
-def hi2(): 
-    print(request.headers.get('token', None))
-    return {"p": "pong"}
+@app.get("/items/{item_id}")
+async def item(item_id: int):
+    return {"id": item_id}
